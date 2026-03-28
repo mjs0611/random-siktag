@@ -62,7 +62,89 @@ export function pickRandom(category: Category | "all"): string {
 export function getSlotSequence(result: string, category: Category | "all"): string[] {
   const pool = category === "all" ? Object.values(MENUS).flat() : MENUS[category];
   const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, 12);
-  // 마지막에 result가 오도록
   const filtered = shuffled.filter((m) => m !== result).slice(0, 11);
   return [...filtered, result];
+}
+
+// ─── 가챠 ───────────────────────────────────────────────
+export type GachaRarity = "normal" | "rare" | "legend";
+
+export const GACHA_MENUS: Record<GachaRarity, string[]> = {
+  normal: [
+    "김치찌개", "된장찌개", "라면", "김밥", "떡볶이",
+    "순대", "짜장면", "짬뽕", "볶음밥", "비빔밥",
+    "우동", "칼국수", "샌드위치", "핫도그", "컵라면",
+    "제육볶음", "돈카츠", "파스타", "피자", "버거",
+  ],
+  rare: [
+    "삼겹살", "불고기", "갈비찜", "보쌈", "족발",
+    "스테이크", "초밥", "라멘", "마라탕", "훠궈",
+    "탕수육", "깐풍기", "삼계탕", "갈비탕", "부대찌개",
+    "카르보나라", "리조또", "오마카세 코스", "샤브샤브", "스키야키",
+  ],
+  legend: [
+    "🦞 랍스터 코스",
+    "🥩 와규 오마카세",
+    "🍣 스시 오마카세",
+    "🦀 킹크랩",
+    "🥂 파인다이닝",
+    "🦆 베이징 오리",
+    "🍖 바베큐 플래터",
+    "🫕 트러플 리조또",
+  ],
+};
+
+export const GACHA_RARITY_CONFIG = {
+  normal:  { label: "일반",   color: "#8B95A1", bg: "#F2F4F6", rate: 0.60 },
+  rare:    { label: "레어",   color: "#3182F6", bg: "#EBF3FF", rate: 0.30 },
+  legend:  { label: "레전드", color: "#FF6B35", bg: "#FFF0EB", rate: 0.10 },
+};
+
+export function drawGacha(): { menu: string; rarity: GachaRarity } {
+  const r = Math.random();
+  let rarity: GachaRarity;
+  if (r < 0.10) rarity = "legend";
+  else if (r < 0.40) rarity = "rare";
+  else rarity = "normal";
+
+  const pool = GACHA_MENUS[rarity];
+  const menu = pool[Math.floor(Math.random() * pool.length)];
+  return { menu, rarity };
+}
+
+// ─── 식판 ───────────────────────────────────────────────
+export const SIKPAN = {
+  main: [
+    "쌀밥", "잡곡밥", "흑미밥", "현미밥", "보리밥",
+    "볶음밥", "비빔밥", "콩나물밥", "버섯밥", "김치볶음밥",
+  ],
+  soup: [
+    "된장국", "미역국", "김치찌개", "순두부찌개", "콩나물국",
+    "시금치국", "북어국", "계란국", "무국", "부대찌개",
+  ],
+  side1: [
+    "김치", "깍두기", "열무김치", "배추김치", "오이소박이",
+    "파김치", "총각김치", "깻잎장아찌", "무장아찌", "갓김치",
+  ],
+  side2: [
+    "계란말이", "멸치볶음", "시금치나물", "콩나물무침", "잡채",
+    "두부조림", "감자조림", "어묵볶음", "고사리나물", "호박볶음",
+  ],
+};
+
+export type SikpanResult = {
+  main: string;
+  soup: string;
+  side1: string;
+  side2: string;
+};
+
+export function drawSikpan(): SikpanResult {
+  const pick = <T>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+  return {
+    main:  pick(SIKPAN.main),
+    soup:  pick(SIKPAN.soup),
+    side1: pick(SIKPAN.side1),
+    side2: pick(SIKPAN.side2),
+  };
 }

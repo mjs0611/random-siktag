@@ -2,69 +2,83 @@
 import { useState, useEffect, useCallback } from "react";
 
 const FREE_SPINS_PER_DAY = 3;
-const STORAGE_KEY = "meokja_spin_state";
+const STORAGE_KEY = "randomsiktag_spin_state";
 
-interface SpinRecord {
-  menu: string;
-  category: string;
+export type GameType = "roulette" | "gacha" | "sikpan";
+
+export interface HistoryRecord {
+  game: GameType;
+  label: string;
+  category?: string;
+  rarity?: string;
   ts: number;
 }
 
 interface SpinState {
-  date: string;          // "YYYY-MM-DD"
-  freeSpinsUsed: number; // 오늘 사용한 무료 횟수
-  history: SpinRecord[];
+  date: string;
+  spinsUsed: Record<GameType, number>;
+  history: HistoryRecord[];
 }
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function defaultState(): SpinState {
+  return {
+    date: todayStr(),
+    spinsUsed: { roulette: 0, gacha: 0, sikpan: 0 },
+    history: [],
+  };
+}
+
 function loadState(): SpinState {
-  if (typeof window === "undefined") {
-    return { date: todayStr(), freeSpinsUsed: 0, history: [] };
-  }
+  if (typeof window === "undefined") return defaultState();
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { date: todayStr(), freeSpinsUsed: 0, history: [] };
+    if (!raw) return defaultState();
     const parsed: SpinState = JSON.parse(raw);
-    // 날짜가 바뀌면 무료 횟수 초기화
     if (parsed.date !== todayStr()) {
-      return { date: todayStr(), freeSpinsUsed: 0, history: parsed.history };
+      return { ...defaultState(), history: parsed.history };
     }
     return parsed;
   } catch {
-    return { date: todayStr(), freeSpinsUsed: 0, history: [] };
+    return defaultState();
   }
 }
 
-export function useSpinState() {
+export function useSpinState(game: GameType) {
   const [state, setState] = useState<SpinState>(() => loadState());
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
-  const freeSpinsLeft = Math.max(0, FREE_SPINS_PER_DAY - state.freeSpinsUsed);
+  const freeSpinsLeft = Math.max(0, FREE_SPINS_PER_DAY - (state.spinsUsed[game] ?? 0));
   const needsAd = freeSpinsLeft === 0;
 
-  const recordSpin = useCallback((menu: string, category: string) => {
+  const recordSpin = useCallback((record: Omit<HistoryRecord, "ts">) => {
     setState((prev) => ({
       ...prev,
-      freeSpinsUsed: prev.freeSpinsUsed < FREE_SPINS_PER_DAY
-        ? prev.freeSpinsUsed + 1
-        : prev.freeSpinsUsed,
-      history: [{ menu, category, ts: Date.now() }, ...prev.history].slice(0, 50),
+      spinsUsed: {
+        ...prev.spinsUsed,
+        [game]: prev.spinsUsed[game] < FREE_SPINS_PER_DAY
+          ? prev.spinsUsed[game] + 1
+          : prev.spinsUsed[game],
+      },
+      history: [{ ...record, ts: Date.now() }, ...prev.history].slice(0, 100),
     }));
-  }, []);
+  }, [game]);
 
-  // 광고 시청 후 1회 추가 지급: freeSpinsUsed를 1 감소시켜 1회 확보
   const grantRewardSpin = useCallback(() => {
     setState((prev) => ({
       ...prev,
-      freeSpinsUsed: Math.max(0, prev.freeSpinsUsed - 1),
+      spinsUsed: {
+        ...prev.spinsUsed,
+        [game]: Math.max(0, prev.spinsUsed[game] - 1),
+      },
     }));
-  }, []);
+  }, [game]);
 
   const todayHistory = state.history.filter(
     (r) => new Date(r.ts).toISOString().slice(0, 10) === todayStr()

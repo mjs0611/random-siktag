@@ -1,16 +1,24 @@
 "use client";
-import { ListRow, ListHeader, adaptive } from "@toss/tds-mobile";
-import { CATEGORIES } from "@/lib/menus";
+import { ListRow, ListHeader } from "@toss/tds-mobile";
+import { useSpinState, HistoryRecord, GameType } from "@/hooks/useSpinState";
 
-interface HistoryRecord {
-  menu: string;
-  category: string;
-  ts: number;
-}
+const GAME_CONFIG: Record<GameType, { label: string; emoji: string }> = {
+  roulette: { label: "룰렛", emoji: "🎰" },
+  gacha:    { label: "가챠", emoji: "🎁" },
+  sikpan:   { label: "식판", emoji: "🍱" },
+};
 
-interface Props {
-  history: HistoryRecord[];
-}
+const RARITY_COLOR: Record<string, string> = {
+  normal: "#8B95A1",
+  rare:   "#3182F6",
+  legend: "#FF6B35",
+};
+
+const RARITY_LABEL: Record<string, string> = {
+  normal: "일반",
+  rare:   "레어",
+  legend: "레전드",
+};
 
 function formatTime(ts: number) {
   return new Date(ts).toLocaleTimeString("ko-KR", {
@@ -30,20 +38,11 @@ function formatDate(ts: number) {
   return d.toLocaleDateString("ko-KR", { month: "long", day: "numeric" });
 }
 
-function getCategoryInfo(id: string) {
-  if (id === "all") return { label: "전체", emoji: "🍽️" };
-  return CATEGORIES.find((c) => c.id === id) ?? { label: id, emoji: "🍽️" };
-}
+export default function MyPage() {
+  // Any game returns the shared full history
+  const { history } = useSpinState("roulette");
 
-export default function MyPage({ history }: Props) {
-  const stats = CATEGORIES.map((cat) => ({
-    ...cat,
-    count: history.filter((h) => h.category === cat.id).length,
-  })).sort((a, b) => b.count - a.count);
-
-  const totalSpins = history.length;
-
-  if (totalSpins === 0) {
+  if (history.length === 0) {
     return (
       <div
         style={{
@@ -68,6 +67,13 @@ export default function MyPage({ history }: Props) {
     );
   }
 
+  // 게임별 통계
+  const gameCounts = (["roulette", "gacha", "sikpan"] as GameType[]).map((g) => ({
+    ...GAME_CONFIG[g],
+    game: g,
+    count: history.filter((h) => h.game === g).length,
+  }));
+
   // 날짜별 그룹핑
   const grouped = history.reduce<Record<string, HistoryRecord[]>>((acc, record) => {
     const key = formatDate(record.ts);
@@ -88,16 +94,14 @@ export default function MyPage({ history }: Props) {
         }}
       >
         <p style={{ fontSize: 14, color: "#8B95A1", marginBottom: 12, marginTop: 0 }}>
-          총{" "}
-          <strong style={{ color: "#FF6B35" }}>{totalSpins}회</strong>{" "}
-          추천받았어요
+          총 <strong style={{ color: "#FF6B35" }}>{history.length}회</strong> 뽑았어요
         </p>
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-          {stats
-            .filter((s) => s.count > 0)
-            .map((s) => (
+        <div style={{ display: "flex", gap: 6 }}>
+          {gameCounts
+            .filter((g) => g.count > 0)
+            .map((g) => (
               <div
-                key={s.id}
+                key={g.game}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -110,9 +114,9 @@ export default function MyPage({ history }: Props) {
                   color: "#191F28",
                 }}
               >
-                <span>{s.emoji}</span>
-                <span>{s.label}</span>
-                <span style={{ color: "#FF6B35", marginLeft: 2 }}>{s.count}</span>
+                <span>{g.emoji}</span>
+                <span>{g.label}</span>
+                <span style={{ color: "#FF6B35", marginLeft: 2 }}>{g.count}</span>
               </div>
             ))}
         </div>
@@ -125,7 +129,7 @@ export default function MyPage({ history }: Props) {
             title={
               <ListHeader.TitleParagraph
                 typography="t7"
-                color={adaptive.grey600}
+                color="#8B95A1"
                 fontWeight="bold"
               >
                 {date}
@@ -134,19 +138,22 @@ export default function MyPage({ history }: Props) {
           />
           <div style={{ background: "#ffffff" }}>
             {records.map((r, i) => {
-              const catInfo = getCategoryInfo(r.category);
+              const game = GAME_CONFIG[r.game];
+              const subLabel = r.rarity
+                ? `${game.label} · ${RARITY_LABEL[r.rarity] ?? r.rarity}`
+                : game.label;
               return (
                 <ListRow
                   key={r.ts}
                   border={i === 0 ? "none" : "indented"}
                   left={
-                    <span style={{ fontSize: 24, lineHeight: 1 }}>{catInfo.emoji}</span>
+                    <span style={{ fontSize: 24, lineHeight: 1 }}>{game.emoji}</span>
                   }
                   contents={
                     <ListRow.Texts
                       type="2RowTypeA"
-                      top={r.menu}
-                      bottom={catInfo.label}
+                      top={r.label}
+                      bottom={subLabel}
                     />
                   }
                   right={

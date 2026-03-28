@@ -35,7 +35,10 @@ function useTossAds() {
 
 export default function BannerAd() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
   const { isInitialized, attachBanner } = useTossAds();
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!isInitialized || !containerRef.current) return;
@@ -43,7 +46,7 @@ export default function BannerAd() {
     return () => attached?.destroy();
   }, [isInitialized, attachBanner]);
 
-  if (!TossAds.initialize.isSupported?.()) return null;
+  if (!mounted || !TossAds.initialize.isSupported?.()) return null;
 
   return (
     <div
