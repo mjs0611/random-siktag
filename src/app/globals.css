@@ -1,0 +1,42 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  --toss-primary: #3182F6;
+  --toss-surface: #F2F4F6;
+  --toss-surface-low: #F9FAFB;
+  --toss-surface-high: #E5E8EB;
+  --toss-on-surface: #191F28;
+  --toss-on-surface-variant: #8B95A1;
+  --toss-card: #FFFFFF;
+  --meokja-primary: #FF6B35;
+  --meokja-primary-light: #FFF0EB;
+}
+
+body {
+  font-family: var(--font-pretendard);
+  color: var(--toss-on-surface);
+  background-color: var(--toss-surface);
+}
+
+@keyframes slot-spin {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+
+@keyframes result-pop {
+  0%   { transform: scale(0.8); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
