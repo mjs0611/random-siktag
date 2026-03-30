@@ -80,25 +80,26 @@ export default function Home() {
 
       <BottomTabBar active={bottomTab} onChange={setBottomTab} />
 
-      <ConfirmDialog
-        open={showExitModal}
-        title={<ConfirmDialog.Title>랜덤식탁을 종료할까요?</ConfirmDialog.Title>}
-        cancelButton={
-          <ConfirmDialog.CancelButton onClick={() => setShowExitModal(false)}>
-            닫기
-          </ConfirmDialog.CancelButton>
-        }
-        confirmButton={
-          <ConfirmDialog.ConfirmButton
-            color="primary"
-            onClick={() => { closeView(); }}
-          >
-            종료하기
-          </ConfirmDialog.ConfirmButton>
-        }
-        onClose={() => setShowExitModal(false)}
-        closeOnDimmerClick={false}
-      />
+      {showExitModal && (
+        <ConfirmDialog
+          open={showExitModal}
+          title={<ConfirmDialog.Title>랜덤식탁을 종료할까요?</ConfirmDialog.Title>}
+          cancelButton={
+            <ConfirmDialog.CancelButton onClick={() => setShowExitModal(false)}>
+              닫기
+            </ConfirmDialog.CancelButton>
+          }
+          confirmButton={
+            <ConfirmDialog.ConfirmButton
+              color="primary"
+              onClick={() => { closeView(); }}
+            >
+              종료하기
+            </ConfirmDialog.ConfirmButton>
+          }
+          onClose={() => setShowExitModal(false)}
+        />
+      )}
     </div>
   );
 }
