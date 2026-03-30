@@ -2,6 +2,7 @@
 import { useState, useCallback } from "react";
 import { Button } from "@toss/tds-mobile";
 import { drawSikpan, SikpanResult } from "@/lib/menus";
+import { haptic } from "@/lib/bridge";
 import { useSpinState } from "@/hooks/useSpinState";
 import { useRewardedAd } from "@/hooks/useRewardedAd";
 import BannerAd from "@/components/BannerAd";
@@ -26,6 +27,7 @@ export default function SikpanGame() {
       setPhase("done");
       const label = `${drawn.main} · ${drawn.soup} · ${drawn.side1} · ${drawn.side2}`;
       recordSpin({ game: "sikpan", label });
+      haptic("success");
     }, 1000);
   }, [phase, recordSpin]);
 

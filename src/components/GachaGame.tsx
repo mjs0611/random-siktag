@@ -2,6 +2,7 @@
 import { useState, useCallback } from "react";
 import { Button } from "@toss/tds-mobile";
 import { drawGacha, GACHA_RARITY_CONFIG, GachaRarity } from "@/lib/menus";
+import { haptic } from "@/lib/bridge";
 import { useSpinState } from "@/hooks/useSpinState";
 import { useRewardedAd } from "@/hooks/useRewardedAd";
 import BannerAd from "@/components/BannerAd";
@@ -26,6 +27,7 @@ export default function GachaGame() {
       setResult(drawn);
       setPhase("done");
       recordSpin({ game: "gacha", label: drawn.menu, rarity: drawn.rarity });
+      haptic(drawn.rarity === "legend" ? "confetti" : "success");
     }, 1200);
   }, [phase, recordSpin]);
 

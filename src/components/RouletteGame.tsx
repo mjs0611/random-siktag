@@ -7,6 +7,7 @@ import BannerAd from "@/components/BannerAd";
 import { useSpinState } from "@/hooks/useSpinState";
 import { useRewardedAd } from "@/hooks/useRewardedAd";
 import { pickRandom, Category } from "@/lib/menus";
+import { haptic } from "@/lib/bridge";
 
 export default function RouletteGame() {
   const [category, setCategory] = useState<Category | "all">("all");
@@ -25,7 +26,10 @@ export default function RouletteGame() {
 
   const handleSpinDone = useCallback(() => {
     setIsSpinning(false);
-    if (result) recordSpin({ game: "roulette", label: result, category });
+    if (result) {
+      recordSpin({ game: "roulette", label: result, category });
+      haptic("success");
+    }
   }, [result, category, recordSpin]);
 
   const canSpin = freeSpinsLeft > 0 && !isSpinning;
