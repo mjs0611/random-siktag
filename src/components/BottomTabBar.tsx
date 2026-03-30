@@ -8,8 +8,8 @@ interface Props {
 }
 
 const TABS = [
-  { id: "home" as const, label: "홈", icon: "🏠" },
-  { id: "history" as const, label: "기록", icon: "📋" },
+  { id: "home" as const, label: "홈", iconPath: "/icons/home.png" },
+  { id: "history" as const, label: "기록", iconPath: "/icons/history.png" },
 ];
 
 export default function BottomTabBar({ active, onChange }: Props) {
@@ -46,11 +46,16 @@ export default function BottomTabBar({ active, onChange }: Props) {
               background: "none",
               border: "none",
               cursor: "pointer",
-              color: isActive ? "#FF6B35" : "#8B95A1",
+              color: isActive ? "#3182F6" : "#8B95A1",
               fontFamily: "inherit",
             }}
           >
-            <span style={{ fontSize: 20 }}>{tab.icon}</span>
+            <img
+              src={tab.iconPath}
+              alt={tab.label}
+              style={{ width: 24, height: 24, objectFit: "contain", mixBlendMode: "multiply", opacity: isActive ? 1 : 0.4 }}
+            />
+
             <span
               style={{
                 fontSize: 11,

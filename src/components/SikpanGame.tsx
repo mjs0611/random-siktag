@@ -44,10 +44,6 @@ export default function SikpanGame() {
           gap: 28,
         }}
       >
-        {/* 오늘 횟수 */}
-        <p style={{ fontSize: 13, color: "#8B95A1", margin: 0 }}>
-          오늘 <strong style={{ color: "#191F28" }}>{todayHistory.length}번</strong> 뽑았어요
-        </p>
 
         {/* 식판 트레이 */}
         <div
@@ -76,7 +72,7 @@ export default function SikpanGame() {
         <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 10 }}>
           {freeSpinsLeft > 0 && (
             <p style={{ fontSize: 13, color: "#8B95A1", margin: 0, textAlign: "center" }}>
-              무료 뽑기 <strong style={{ color: "#FF6B35" }}>{freeSpinsLeft}회</strong> 남음
+              무료 뽑기 <strong style={{ color: "#3182F6" }}>{freeSpinsLeft}회</strong> 남음
             </p>
           )}
 
@@ -87,9 +83,8 @@ export default function SikpanGame() {
               color="primary"
               variant="fill"
               onClick={draw}
-              style={{ "--button-background-color": "#FF6B35", "--button-color": "#ffffff" } as React.CSSProperties}
             >
-              {phase === "done" ? "다시 뽑기 🍱" : "오늘의 식판 🍱"}
+              {phase === "done" ? "다시 뽑기" : "오늘의 식판"}
             </Button>
           )}
 
@@ -107,7 +102,7 @@ export default function SikpanGame() {
                 loading={adLoading}
                 onClick={showAd}
               >
-                {isAdLoaded ? "광고 보고 1회 더 뽑기 🍱" : "광고 준비 중..."}
+                {isAdLoaded ? "광고 보고 1회 더 뽑기" : "광고 준비 중..."}
               </Button>
             </div>
           )}
@@ -160,7 +155,7 @@ function TrayCell({
             height: 20,
             borderRadius: "50%",
             border: "2px solid #E5E8EB",
-            borderTopColor: "#FF6B35",
+            borderTopColor: "#3182F6",
             animation: "spin 0.8s linear infinite",
           }}
         />

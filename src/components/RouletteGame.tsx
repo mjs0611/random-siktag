@@ -45,10 +45,6 @@ export default function RouletteGame() {
           gap: 24,
         }}
       >
-        <p style={{ fontSize: 13, color: "#8B95A1", margin: 0 }}>
-          오늘 <strong style={{ color: "#191F28" }}>{todayHistory.length}번</strong> 추천받았어요
-        </p>
-
         <SlotRoulette
           result={result}
           category={category}
@@ -63,7 +59,7 @@ export default function RouletteGame() {
               style={{
                 fontSize: 30,
                 fontWeight: 800,
-                color: "#FF6B35",
+                color: "#3182F6",
                 margin: 0,
                 letterSpacing: "-0.5px",
               }}
@@ -76,7 +72,7 @@ export default function RouletteGame() {
         <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
           {freeSpinsLeft > 0 && (
             <p style={{ fontSize: 13, color: "#8B95A1", margin: 0 }}>
-              무료 추천 <strong style={{ color: "#FF6B35" }}>{freeSpinsLeft}회</strong> 남음
+              무료 추천 <strong style={{ color: "#3182F6" }}>{freeSpinsLeft}회</strong> 남음
             </p>
           )}
 
@@ -87,12 +83,8 @@ export default function RouletteGame() {
               color="primary"
               variant="fill"
               onClick={spin}
-              style={{
-                "--button-background-color": "#FF6B35",
-                "--button-color": "#ffffff",
-              } as React.CSSProperties}
             >
-              {result ? "다시 추천받기" : "메뉴 추천받기 🎰"}
+              {result ? "다시 추천받기" : "메뉴 추천받기"}
             </Button>
           )}
 
@@ -110,7 +102,7 @@ export default function RouletteGame() {
                 loading={adLoading}
                 onClick={showAd}
               >
-                {isAdLoaded ? "광고 보고 1회 더 추천받기 🎁" : "광고 준비 중..."}
+                {isAdLoaded ? "광고 보고 1회 더 추천받기" : "광고 준비 중..."}
               </Button>
             </div>
           )}

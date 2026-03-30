@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
-import { SegmentedControl } from "@toss/tds-mobile";
+import { useState, useEffect } from "react";
+import { SegmentedControl, ConfirmDialog } from "@toss/tds-mobile";
+import { graniteEvent, closeView } from "@apps-in-toss/web-framework";
 import RouletteGame from "@/components/RouletteGame";
 import GachaGame from "@/components/GachaGame";
 import SikpanGame from "@/components/SikpanGame";
@@ -12,6 +13,15 @@ type GameTab = "roulette" | "gacha" | "sikpan";
 export default function Home() {
   const [bottomTab, setBottomTab] = useState<BottomTab>("home");
   const [gameTab, setGameTab] = useState<GameTab>("roulette");
+  const [showExitModal, setShowExitModal] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = graniteEvent.addEventListener("backEvent", {
+      onEvent: () => setShowExitModal(true),
+      onError: () => {},
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div
@@ -69,6 +79,26 @@ export default function Home() {
       )}
 
       <BottomTabBar active={bottomTab} onChange={setBottomTab} />
+
+      <ConfirmDialog
+        open={showExitModal}
+        title={<ConfirmDialog.Title>랜덤식탁을 종료할까요?</ConfirmDialog.Title>}
+        cancelButton={
+          <ConfirmDialog.CancelButton onClick={() => setShowExitModal(false)}>
+            닫기
+          </ConfirmDialog.CancelButton>
+        }
+        confirmButton={
+          <ConfirmDialog.ConfirmButton
+            color="primary"
+            onClick={() => { closeView(); }}
+          >
+            종료하기
+          </ConfirmDialog.ConfirmButton>
+        }
+        onClose={() => setShowExitModal(false)}
+        closeOnDimmerClick={false}
+      />
     </div>
   );
 }
