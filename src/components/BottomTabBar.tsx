@@ -42,7 +42,7 @@ export default function BottomTabBar({ active, onChange }: Props) {
               alignItems: "center",
               justifyContent: "center",
               gap: 3,
-              padding: "10px 0",
+              padding: "10px 0 12px",
               background: "none",
               border: "none",
               cursor: "pointer",

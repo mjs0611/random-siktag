@@ -16,11 +16,14 @@ export default function Home() {
   const [showExitModal, setShowExitModal] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = graniteEvent.addEventListener("backEvent", {
-      onEvent: () => setShowExitModal(true),
-      onError: () => {},
-    });
-    return () => unsubscribe();
+    // @ts-ignore
+    if (typeof window !== "undefined" && window.ReactNativeWebView) {
+      const unsubscribe = graniteEvent.addEventListener("backEvent", {
+        onEvent: () => setShowExitModal(true),
+        onError: () => {},
+      });
+      return () => unsubscribe();
+    }
   }, []);
 
   return (
@@ -39,7 +42,7 @@ export default function Home() {
           {/* 게임 탭 선택 */}
           <div
             style={{
-              padding: "12px 16px 0",
+              padding: "20px 16px 12px",
               background: "#ffffff",
               flexShrink: 0,
             }}
@@ -62,7 +65,7 @@ export default function Home() {
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              paddingBottom: 56,
+              paddingBottom: "calc(76px + env(safe-area-inset-bottom))",
             }}
           >
             {gameTab === "roulette" && <RouletteGame />}
@@ -73,7 +76,7 @@ export default function Home() {
       )}
 
       {bottomTab === "history" && (
-        <div style={{ flex: 1, overflow: "hidden", paddingBottom: 56 }}>
+        <div style={{ flex: 1, overflow: "hidden", paddingBottom: "calc(76px + env(safe-area-inset-bottom))" }}>
           <MyPage />
         </div>
       )}
