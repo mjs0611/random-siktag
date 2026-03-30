@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { loadFullScreenAd, showFullScreenAd } from "@apps-in-toss/web-framework";
 
 // 광고 그룹 ID는 콘솔에서 발급받은 값으로 교체
-const AD_GROUP_ID = "ait-ad-test-reward-id";
+const AD_GROUP_ID = "ait.v2.live.34643c7d394f4d05";
 
 export function useRewardedAd(onReward: () => void) {
   const [isAdLoaded, setIsAdLoaded] = useState(false);

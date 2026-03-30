@@ -60,34 +60,7 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
         boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
       }}
     >
-      {/* 위 페이드 */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: ITEM_HEIGHT,
-          background: "linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0))",
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
-      />
-      {/* 아래 페이드 */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: ITEM_HEIGHT,
-          background: "linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0))",
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* 선택 하이라이트 */}
+      {/* 선택 하이라이트 — 아이템보다 아래 (zIndex: 0) */}
       <div
         style={{
           position: "absolute",
@@ -98,12 +71,12 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
           background: "#FFF0EB",
           borderTop: "1.5px solid #FF6B35",
           borderBottom: "1.5px solid #FF6B35",
-          zIndex: 1,
+          zIndex: 0,
         }}
       />
 
-      {/* 슬롯 트랙 */}
-      <div style={{ height: ITEM_HEIGHT * 3, overflow: "hidden" }}>
+      {/* 슬롯 트랙 — 스태킹 컨텍스트(zIndex:1)로 하이라이트 위에 표시 */}
+      <div style={{ height: ITEM_HEIGHT * 3, overflow: "hidden", position: "relative", zIndex: 1 }}>
         <div
           style={{
             transform: `translateY(${ITEM_HEIGHT + offset}px)`,
@@ -124,14 +97,38 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
                 fontWeight: 700,
                 color: "#191F28",
                 letterSpacing: "-0.3px",
-                position: "relative",
-                zIndex: 0,
               }}
             >
               {item}
             </div>
           ))}
         </div>
+
+        {/* 페이드 — 트랙 안에서 텍스트 마스킹 */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: ITEM_HEIGHT,
+            background: "linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0))",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: ITEM_HEIGHT,
+            background: "linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0))",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
       </div>
     </div>
   );

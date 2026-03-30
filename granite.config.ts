@@ -5,7 +5,7 @@ export default defineConfig({
   brand: {
     displayName: "랜덤식탁",
     primaryColor: "#FF6B35",
-    icon: "",
+    icon: "https://static.toss.im/appsintoss/27829/c5d3b049-ac79-4812-bd00-fdeee121f5cf.png",
   },
   permissions: [],
   web: {

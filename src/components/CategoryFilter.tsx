@@ -6,7 +6,7 @@ interface Props {
   onChange: (cat: Category | "all") => void;
 }
 
-const ALL = { id: "all" as const, label: "전체", emoji: "🍽️" };
+const ALL = { id: "all" as const, label: "전체", iconPath: "/icons/history.png" };
 
 export default function CategoryFilter({ selected, onChange }: Props) {
   const items = [ALL, ...CATEGORIES];
@@ -18,8 +18,22 @@ export default function CategoryFilter({ selected, onChange }: Props) {
         paddingBottom: 12,
         borderBottom: "1px solid #F2F4F6",
         flexShrink: 0,
+        position: "relative",
       }}
     >
+      {/* 오른쪽 스크롤 힌트 */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: 40,
+          background: "linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1))",
+          zIndex: 1,
+          pointerEvents: "none",
+        }}
+      />
       <div
         style={{
           display: "flex",
@@ -53,7 +67,7 @@ export default function CategoryFilter({ selected, onChange }: Props) {
                 fontFamily: "inherit",
               }}
             >
-              <span style={{ fontSize: 15 }}>{cat.emoji}</span>
+              <img src={cat.iconPath} alt={cat.label} style={{ width: 16, height: 16, objectFit: "contain", mixBlendMode: "multiply", opacity: active ? 1 : 0.6 }} />
               {cat.label}
             </button>
           );

@@ -2,10 +2,10 @@
 import { ListRow, ListHeader } from "@toss/tds-mobile";
 import { useSpinState, HistoryRecord, GameType } from "@/hooks/useSpinState";
 
-const GAME_CONFIG: Record<GameType, { label: string; emoji: string }> = {
-  roulette: { label: "룰렛", emoji: "🎰" },
-  gacha:    { label: "가챠", emoji: "🎁" },
-  sikpan:   { label: "식판", emoji: "🍱" },
+const GAME_CONFIG: Record<GameType, { label: string; iconPath: string }> = {
+  roulette: { label: "룰렛", iconPath: "/icons/roulette.png" },
+  gacha:    { label: "뽑기", iconPath: "/icons/gacha.png" },
+  sikpan:   { label: "식판", iconPath: "/icons/sikpan.png" },
 };
 
 const RARITY_COLOR: Record<string, string> = {
@@ -56,7 +56,7 @@ export default function MyPage() {
           height: "100%",
         }}
       >
-        <span style={{ fontSize: 52 }}>🍽️</span>
+        <img src="/icons/history.png" alt="Empty" style={{ width: 64, height: 64, objectFit: "contain", mixBlendMode: "multiply" }} />
         <p style={{ fontSize: 17, fontWeight: 700, color: "#191F28", margin: 0 }}>
           아직 기록이 없어요
         </p>
@@ -94,7 +94,7 @@ export default function MyPage() {
         }}
       >
         <p style={{ fontSize: 14, color: "#8B95A1", marginBottom: 12, marginTop: 0 }}>
-          총 <strong style={{ color: "#FF6B35" }}>{history.length}회</strong> 뽑았어요
+          총 <strong style={{ color: "#3182F6" }}>{history.length}회</strong> 뽑았어요
         </p>
         <div style={{ display: "flex", gap: 6 }}>
           {gameCounts
@@ -114,9 +114,9 @@ export default function MyPage() {
                   color: "#191F28",
                 }}
               >
-                <span>{g.emoji}</span>
+                <img src={g.iconPath} alt={g.label} style={{ width: 16, height: 16, objectFit: "contain", mixBlendMode: "multiply" }} />
                 <span>{g.label}</span>
-                <span style={{ color: "#FF6B35", marginLeft: 2 }}>{g.count}</span>
+                <span style={{ color: "#3182F6", marginLeft: 2 }}>{g.count}</span>
               </div>
             ))}
         </div>
@@ -147,7 +147,7 @@ export default function MyPage() {
                   key={r.ts}
                   border={i === 0 ? "none" : "indented"}
                   left={
-                    <span style={{ fontSize: 24, lineHeight: 1 }}>{game.emoji}</span>
+                    <img src={game.iconPath} alt={game.label} style={{ width: 28, height: 28, objectFit: "contain", mixBlendMode: "multiply" }} />
                   }
                   contents={
                     <ListRow.Texts

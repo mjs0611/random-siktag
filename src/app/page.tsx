@@ -39,9 +39,9 @@ export default function Home() {
               onChange={(v) => setGameTab(v as GameTab)}
               size="large"
             >
-              <SegmentedControl.Item value="roulette">🎰 룰렛</SegmentedControl.Item>
-              <SegmentedControl.Item value="gacha">🎁 가챠</SegmentedControl.Item>
-              <SegmentedControl.Item value="sikpan">🍱 식판</SegmentedControl.Item>
+              <SegmentedControl.Item value="roulette">룰렛</SegmentedControl.Item>
+              <SegmentedControl.Item value="gacha">뽑기</SegmentedControl.Item>
+              <SegmentedControl.Item value="sikpan">식판</SegmentedControl.Item>
             </SegmentedControl>
           </div>
 

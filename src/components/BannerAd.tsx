@@ -3,7 +3,7 @@ import { TossAds } from "@apps-in-toss/web-framework";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // 광고 그룹 ID는 콘솔에서 발급받은 값으로 교체
-const BANNER_AD_GROUP_ID = "ait-ad-test-banner-id";
+const BANNER_AD_GROUP_ID = "ait.v2.live.19ca5011ffb44cfa";
 
 function useTossAds() {
   const [isInitialized, setIsInitialized] = useState(false);
