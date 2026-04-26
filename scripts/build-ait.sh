@@ -3,5 +3,6 @@
 REPO="/Users/junseungmo/Documents/03_Resources/repos/random-siktag"
 
 rm -rf "$REPO/.next"
+rm -rf "$REPO/out"
 
 BUILD_TARGET=ait npx next build

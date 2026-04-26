@@ -5,38 +5,67 @@
 
 :root {
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+  
+  /* Toss Blue Palette */
   --toss-primary: #3182F6;
-  --toss-surface: #F2F4F6;
-  --toss-surface-low: #F9FAFB;
-  --toss-surface-high: #E5E8EB;
-  --toss-on-surface: #191F28;
-  --toss-on-surface-variant: #8B95A1;
+  --toss-primary-hover: #1b64da;
+  --toss-primary-light: #EBF3FF;
+  
+  /* Grays */
+  --toss-grey-50: #F9FAFB;
+  --toss-grey-100: #F2F4F6;
+  --toss-grey-200: #E5E8EB;
+  --toss-grey-300: #D1D6DB;
+  --toss-grey-400: #B0B8C1;
+  --toss-grey-500: #8B95A1;
+  --toss-grey-600: #6B7684;
+  --toss-grey-700: #4E5968;
+  --toss-grey-800: #333D4B;
+  --toss-grey-900: #191F28;
+
+  /* Surfaces */
+  --toss-surface: var(--toss-grey-100);
   --toss-card: #FFFFFF;
-  --meokja-primary: #FF6B35;
-  --meokja-primary-light: #FFF0EB;
+  --toss-glass: rgba(255, 255, 255, 0.75);
+  
+  /* Borders & Shadows */
+  --toss-border-radius-lg: 24px;
+  --toss-border-radius-xl: 32px;
+  --toss-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --toss-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --toss-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
 }
 
 body {
   font-family: var(--font-pretendard);
-  color: var(--toss-on-surface);
+  color: var(--toss-grey-900);
   background-color: var(--toss-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@keyframes slot-spin {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(-100%); }
+/* Common Components */
+.toss-card {
+  background: var(--toss-card);
+  border-radius: var(--toss-border-radius-lg);
+  box-shadow: var(--toss-shadow-md);
+  padding: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.toss-glass {
+  background: var(--toss-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 @keyframes result-pop {
-  0%   { transform: scale(0.8); opacity: 0; }
-  60%  { transform: scale(1.08); opacity: 1; }
+  0%   { transform: scale(0.92); opacity: 0; }
+  60%  { transform: scale(1.04); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%       { transform: translateX(-6px); }
-  40%       { transform: translateX(6px); }
-  60%       { transform: translateX(-4px); }
-  80%       { transform: translateX(4px); }
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

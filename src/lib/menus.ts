@@ -131,7 +131,7 @@ export const GACHA_MENUS: Record<GachaRarity, string[]> = {
 export const GACHA_RARITY_CONFIG = {
   normal:  { label: "일반",   color: "#8B95A1", bg: "#F2F4F6", rate: 0.60 },
   rare:    { label: "레어",   color: "#3182F6", bg: "#EBF3FF", rate: 0.30 },
-  legend:  { label: "레전드", color: "#FF6B35", bg: "#FFF0EB", rate: 0.10 },
+  legend:  { label: "레전드", color: "#2143B3", bg: "#EBF3FF", rate: 0.10 },
 };
 
 export function drawGacha(): { menu: string; rarity: GachaRarity } {

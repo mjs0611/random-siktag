@@ -1,20 +1,17 @@
 "use client";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { loadFullScreenAd, showFullScreenAd } from "@apps-in-toss/web-framework";
 
-// 광고 그룹 ID는 콘솔에서 발급받은 값으로 교체
 const AD_GROUP_ID = "ait.v2.live.34643c7d394f4d05";
 
 export function useRewardedAd(onReward: () => void) {
   const [isAdLoaded, setIsAdLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const unregisterRef = useRef<(() => void) | null>(null);
 
   const loadAd = useCallback(() => {
     if (!loadFullScreenAd.isSupported()) return;
     setIsLoading(true);
     setIsAdLoaded(false);
-
     const unregister = loadFullScreenAd({
       options: { adGroupId: AD_GROUP_ID },
       onEvent: (event) => {
@@ -27,17 +24,16 @@ export function useRewardedAd(onReward: () => void) {
         setIsLoading(false);
       },
     });
-    unregisterRef.current = unregister;
+    return unregister;
   }, []);
 
   useEffect(() => {
-    loadAd();
-    return () => unregisterRef.current?.();
+    const unregister = loadAd();
+    return () => { unregister?.(); };
   }, [loadAd]);
 
   const showAd = useCallback(() => {
-    if (!showFullScreenAd.isSupported() || !isAdLoaded) return;
-
+    if (!isAdLoaded || !showFullScreenAd.isSupported()) return;
     showFullScreenAd({
       options: { adGroupId: AD_GROUP_ID },
       onEvent: (event) => {
@@ -49,11 +45,9 @@ export function useRewardedAd(onReward: () => void) {
           loadAd();
         }
       },
-      onError: () => {
-        loadAd();
-      },
+      onError: () => {},
     });
-  }, [isAdLoaded, loadAd, onReward]);
+  }, [isAdLoaded, onReward, loadAd]);
 
   return { isAdLoaded, isLoading, showAd };
 }

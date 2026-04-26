@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Button } from "@toss/tds-mobile";
 import CategoryFilter from "@/components/CategoryFilter";
 import SlotRoulette from "@/components/SlotRoulette";
@@ -13,6 +13,9 @@ export default function RouletteGame() {
   const [category, setCategory] = useState<Category | "all">("all");
   const [result, setResult] = useState<string | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const { freeSpinsLeft, needsAd, recordSpin, grantRewardSpin, todayHistory } = useSpinState("roulette");
   const { isAdLoaded, isLoading: adLoading, showAd } = useRewardedAd(grantRewardSpin);
@@ -35,7 +38,7 @@ export default function RouletteGame() {
   const canSpin = freeSpinsLeft > 0 && !isSpinning;
 
   return (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--toss-grey-100)" }}>
       <CategoryFilter selected={category} onChange={setCategory} />
 
       <div
@@ -45,8 +48,9 @@ export default function RouletteGame() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          padding: "0 16px",
-          gap: 24,
+          padding: "24px 20px",
+          gap: 32,
+          overflowY: "auto",
         }}
       >
         <SlotRoulette
@@ -57,26 +61,29 @@ export default function RouletteGame() {
         />
 
         {result && !isSpinning && (
-          <div style={{ textAlign: "center", animation: "result-pop 0.4s ease" }}>
-            <p style={{ fontSize: 13, color: "#8B95A1", margin: "0 0 4px" }}>오늘의 추천</p>
-            <p
+          <div style={{ textAlign: "center", animation: "result-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)", width: "100%" }}>
+            <p style={{ fontSize: 14, fontWeight: 600, color: "var(--toss-grey-600)", marginBottom: 12 }}>오늘의 추천 메뉴</p>
+            <div className="toss-card"
               style={{
-                fontSize: 30,
-                fontWeight: 800,
-                color: "#3182F6",
-                margin: 0,
-                letterSpacing: "-0.5px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: 100,
+                width: "100%",
+                background: "var(--toss-card)",
               }}
             >
-              {result}
-            </p>
+              <span style={{ fontSize: 36, fontWeight: 800, color: "var(--toss-grey-900)", letterSpacing: "-0.5px" }}>
+                {result}
+              </span>
+            </div>
           </div>
         )}
 
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-          {freeSpinsLeft > 0 && (
-            <p style={{ fontSize: 13, color: "#8B95A1", margin: 0 }}>
-              무료 추천 <strong style={{ color: "#3182F6" }}>{freeSpinsLeft}회</strong> 남음
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+          {mounted && freeSpinsLeft > 0 && (
+            <p style={{ fontSize: 14, fontWeight: 600, color: "var(--toss-grey-500)", margin: 0 }}>
+              무료 추천 <strong style={{ color: "var(--toss-primary)" }}>{freeSpinsLeft}회</strong> 남음
             </p>
           )}
 
@@ -87,14 +94,15 @@ export default function RouletteGame() {
               color="primary"
               variant="fill"
               onClick={spin}
+              style={{ borderRadius: 18 }}
             >
               {result ? "다시 추천받기" : "메뉴 추천받기"}
             </Button>
           )}
 
           {needsAd && !isSpinning && (
-            <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-              <p style={{ fontSize: 13, color: "#8B95A1", margin: 0 }}>
+            <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 14, width: "100%" }}>
+              <p style={{ fontSize: 14, fontWeight: 500, color: "var(--toss-grey-500)", margin: 0, textAlign: "center" }}>
                 오늘 무료 추천을 모두 사용했어요
               </p>
               <Button
@@ -105,6 +113,7 @@ export default function RouletteGame() {
                 disabled={!isAdLoaded}
                 loading={adLoading}
                 onClick={showAd}
+                style={{ borderRadius: 18 }}
               >
                 {isAdLoaded ? "광고 보고 1회 더 추천받기" : "광고 준비 중..."}
               </Button>
@@ -112,14 +121,12 @@ export default function RouletteGame() {
           )}
 
           {isSpinning && (
-            <p style={{ fontSize: 15, fontWeight: 600, color: "#8B95A1" }}>추천 중...</p>
+            <p style={{ fontSize: 16, fontWeight: 700, color: "var(--toss-grey-400)", animation: "pulse 1.5s infinite" }}>추천 메뉴를 고르는 중...</p>
           )}
         </div>
       </div>
 
-      <div style={{ flexShrink: 0, paddingBottom: "env(safe-area-inset-bottom)" }}>
-        <BannerAd />
-      </div>
+      <BannerAd />
     </div>
   );
 }

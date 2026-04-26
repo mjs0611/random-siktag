@@ -1,6 +1,7 @@
 "use client";
 import { ListRow, ListHeader } from "@toss/tds-mobile";
 import { useSpinState, HistoryRecord, GameType } from "@/hooks/useSpinState";
+import BannerAd from "@/components/BannerAd";
 
 const GAME_CONFIG: Record<GameType, { label: string; iconPath: string }> = {
   roulette: { label: "룰렛", iconPath: "/icons/roulette.png" },
@@ -8,10 +9,11 @@ const GAME_CONFIG: Record<GameType, { label: string; iconPath: string }> = {
   sikpan:   { label: "식판", iconPath: "/icons/sikpan.png" },
 };
 
+
 const RARITY_COLOR: Record<string, string> = {
   normal: "#8B95A1",
   rare:   "#3182F6",
-  legend: "#FF6B35",
+  legend: "#2143B3",
 };
 
 const RARITY_LABEL: Record<string, string> = {
@@ -56,7 +58,7 @@ export default function MyPage() {
           height: "100%",
         }}
       >
-        <img src="/icons/history.png" alt="Empty" style={{ width: 64, height: 64, objectFit: "contain", mixBlendMode: "multiply" }} />
+        <img src="/icons/history_new.png" alt="Empty" style={{ width: 64, height: 64, objectFit: "contain" }} />
         <p style={{ fontSize: 17, fontWeight: 700, color: "#191F28", margin: 0 }}>
           아직 기록이 없어요
         </p>
@@ -83,7 +85,8 @@ export default function MyPage() {
   }, {});
 
   return (
-    <div style={{ height: "100%", overflowY: "auto", paddingBottom: 40 }}>
+    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+    <div style={{ flex: 1, overflowY: "auto", paddingBottom: 16 }}>
       {/* 통계 카드 */}
       <div
         style={{
@@ -114,7 +117,7 @@ export default function MyPage() {
                   color: "#191F28",
                 }}
               >
-                <img src={g.iconPath} alt={g.label} style={{ width: 16, height: 16, objectFit: "contain", mixBlendMode: "multiply" }} />
+                <img src={g.iconPath} alt={g.label} style={{ width: 20, height: 20, objectFit: "contain" }} />
                 <span>{g.label}</span>
                 <span style={{ color: "#3182F6", marginLeft: 2 }}>{g.count}</span>
               </div>
@@ -147,7 +150,7 @@ export default function MyPage() {
                   key={r.ts}
                   border={i === 0 ? "none" : "indented"}
                   left={
-                    <img src={game.iconPath} alt={game.label} style={{ width: 28, height: 28, objectFit: "contain", mixBlendMode: "multiply" }} />
+                    <img src={game.iconPath} alt={game.label} style={{ width: 28, height: 28, objectFit: "contain" }} />
                   }
                   contents={
                     <ListRow.Texts
@@ -168,6 +171,8 @@ export default function MyPage() {
           </div>
         </div>
       ))}
+    </div>
+    <BannerAd />
     </div>
   );
 }

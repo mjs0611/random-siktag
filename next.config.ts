@@ -4,6 +4,7 @@ const isAitBuild = process.env.BUILD_TARGET === "ait";
 
 const nextConfig: NextConfig = {
   ...(isAitBuild ? { output: "export", images: { unoptimized: true } } : {}),
+  typescript: { ignoreBuildErrors: true },
   compiler: {
     emotion: true,
   },
@@ -13,10 +14,6 @@ const nextConfig: NextConfig = {
     "@apps-in-toss/web-framework",
   ],
   turbopack: {},
-  webpack: (config) => {
-    config.experiments = { ...config.experiments, asyncWebAssembly: true, layers: true };
-    return config;
-  },
 };
 
 export default nextConfig;

@@ -53,14 +53,15 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
       style={{
         width: "100%",
         maxWidth: 340,
-        background: "#ffffff",
-        borderRadius: 20,
+        background: "var(--toss-card)",
+        borderRadius: "var(--toss-border-radius-lg)",
         overflow: "hidden",
         position: "relative",
-        boxShadow: "0 2px 16px rgba(0,0,0,0.06)",
+        boxShadow: "var(--toss-shadow-md)",
+        border: "1px solid var(--toss-grey-100)",
       }}
     >
-      {/* 선택 하이라이트 — 아이템보다 아래 (zIndex: 0) */}
+      {/* 선택 하이라이트 */}
       <div
         style={{
           position: "absolute",
@@ -68,14 +69,13 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
           left: 0,
           right: 0,
           height: ITEM_HEIGHT,
-          background: "#FFF0EB",
-          borderTop: "1.5px solid #FF6B35",
-          borderBottom: "1.5px solid #FF6B35",
+          background: "var(--toss-primary-light)",
+          borderTop: "1.5px solid var(--toss-primary)",
+          borderBottom: "1.5px solid var(--toss-primary)",
           zIndex: 0,
         }}
       />
 
-      {/* 슬롯 트랙 — 스태킹 컨텍스트(zIndex:1)로 하이라이트 위에 표시 */}
       <div style={{ height: ITEM_HEIGHT * 3, overflow: "hidden", position: "relative", zIndex: 1 }}>
         <div
           style={{
@@ -93,10 +93,10 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: 22,
-                fontWeight: 700,
-                color: "#191F28",
-                letterSpacing: "-0.3px",
+                fontSize: 24,
+                fontWeight: 800,
+                color: "var(--toss-grey-900)",
+                letterSpacing: "-0.5px",
               }}
             >
               {item}
@@ -104,7 +104,7 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
           ))}
         </div>
 
-        {/* 페이드 — 트랙 안에서 텍스트 마스킹 */}
+        {/* 페이드 */}
         <div
           style={{
             position: "absolute",
@@ -112,7 +112,7 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
             left: 0,
             right: 0,
             height: ITEM_HEIGHT,
-            background: "linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0))",
+            background: "linear-gradient(to bottom, var(--toss-card), rgba(255,255,255,0))",
             pointerEvents: "none",
             zIndex: 1,
           }}
@@ -124,7 +124,7 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
             left: 0,
             right: 0,
             height: ITEM_HEIGHT,
-            background: "linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0))",
+            background: "linear-gradient(to top, var(--toss-card), rgba(255,255,255,0))",
             pointerEvents: "none",
             zIndex: 1,
           }}
