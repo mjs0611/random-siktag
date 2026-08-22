@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run dev",
+    "build": "bash scripts/build-ait.sh && ait build",
     "build:ait": "bash scripts/build-ait.sh",
     "bundle": "npm run build:ait && ait build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-    "@apps-in-toss/web-framework": "^2.0.0",
+    "@apps-in-toss/web-framework": "^3.0.5",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@toss/tds-mobile": "^2.2.1",
@@ -27,6 +27,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@apps-in-toss/devtools": "^3.0.5"
   }
 }
