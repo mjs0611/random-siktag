@@ -1,4 +1,4 @@
-import type { HapticFeedbackType } from "@apps-in-toss/web-bridge";
+import type { HapticFeedbackType } from "@apps-in-toss/web-framework";
 
 export async function haptic(type: HapticFeedbackType): Promise<void> {
   try {
