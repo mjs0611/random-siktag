@@ -26,4 +26,4 @@ jobs:
           AIT_TOKEN: ${{ secrets.AIT_TOKEN }}
 
       - name: Build and Deploy
-        run: npx ait build && npx ait deploy -m "auto deploy [GitHub Actions]"
+        run: npm run build && npx ait deploy -m "manual deploy [GitHub Actions]"
