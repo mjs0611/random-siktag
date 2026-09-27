@@ -34,18 +34,22 @@ export function useRewardedAd(onReward: () => void) {
 
   const showAd = useCallback(() => {
     if (!isAdLoaded || !showFullScreenAd.isSupported()) return;
+    // 표시된 광고든 실패한 광고든 재사용 불가 — 버튼을 '준비 중'으로 돌리고 새로 로드한다.
+    const reload = () => {
+      setIsAdLoaded(false);
+      loadAd();
+    };
     showFullScreenAd({
       options: { adGroupId: AD_GROUP_ID },
       onEvent: (event) => {
         if (event.type === "userEarnedReward") {
           onReward();
         }
-        if (event.type === "dismissed") {
-          setIsAdLoaded(false);
-          loadAd();
+        if (event.type === "dismissed" || event.type === "failedToShow") {
+          reload();
         }
       },
-      onError: () => {},
+      onError: reload,
     });
   }, [isAdLoaded, onReward, loadAd]);
 
