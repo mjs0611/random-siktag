@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import { dateKey } from "@/lib/dateKey";
 
 const FREE_SPINS_PER_DAY = 3;
 const STORAGE_KEY = "randomsiktag_spin_state";
@@ -21,7 +22,7 @@ interface SpinState {
 }
 
 function todayStr() {
-  return new Date().toISOString().slice(0, 10);
+  return dateKey();
 }
 
 function defaultState(): SpinState {
@@ -81,7 +82,7 @@ export function useSpinState(game: GameType) {
   }, [game]);
 
   const todayHistory = state.history.filter(
-    (r) => new Date(r.ts).toISOString().slice(0, 10) === todayStr()
+    (r) => dateKey(r.ts) === todayStr()
   );
 
   return { freeSpinsLeft, needsAd, recordSpin, grantRewardSpin, history: state.history, todayHistory };
