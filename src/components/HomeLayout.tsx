@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SegmentedControl } from "@toss/tds-mobile";
 import RouletteGame from "@/components/RouletteGame";
 import GachaGame from "@/components/GachaGame";
@@ -20,6 +20,33 @@ export default function HomeLayout({
 }: HomeLayoutProps) {
   const [bottomTab, setBottomTab] = useState<BottomTab>(initialBottomTab);
   const [gameTab, setGameTab] = useState<GameTab>(initialGameTab);
+
+  // 토스 내비게이션 바 뒤로가기: 기록 탭 → 홈 탭, 뽑기·식판 → 룰렛, 룰렛이면 미니앱 종료
+  // (라우트는 딥링크 진입점일 뿐 앱 안에서 페이지 이동이 없어 탭 상태만 되돌린다)
+  const backRef = useRef<() => boolean>(() => false);
+  backRef.current = () => {
+    if (bottomTab !== "home") { setBottomTab("home"); return true; }
+    if (gameTab !== "roulette") { setGameTab("roulette"); return true; }
+    return false;
+  };
+
+  useEffect(() => {
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { graniteEvent, closeView } = await import("@apps-in-toss/web-framework");
+        if (cancelled) return;
+        unsubscribe = graniteEvent.addEventListener("backEvent", {
+          onEvent: () => {
+            if (backRef.current()) return;
+            closeView();
+          },
+        });
+      } catch { /* 토스 앱 밖 */ }
+    })();
+    return () => { cancelled = true; unsubscribe?.(); };
+  }, []);
 
   return (
     <div
