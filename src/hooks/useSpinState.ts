@@ -51,8 +51,14 @@ function loadState(): SpinState {
 export function useSpinState(game: GameType) {
   const [state, setState] = useState<SpinState>(() => loadState());
 
+  const [storageError, setStorageError] = useState(false);
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      setStorageError(false);
+    } catch {
+      setStorageError(true); // 현재 화면의 추천은 유지하되 영속 저장 실패를 알린다.
+    }
   }, [state]);
 
   const freeSpinsLeft = Math.max(0, FREE_SPINS_PER_DAY - (state.spinsUsed[game] ?? 0));
@@ -85,5 +91,5 @@ export function useSpinState(game: GameType) {
     (r) => dateKey(r.ts) === todayStr()
   );
 
-  return { freeSpinsLeft, needsAd, recordSpin, grantRewardSpin, history: state.history, todayHistory };
+  return { freeSpinsLeft, needsAd, recordSpin, grantRewardSpin, history: state.history, todayHistory, storageError };
 }

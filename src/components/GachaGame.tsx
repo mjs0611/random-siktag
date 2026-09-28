@@ -16,8 +16,8 @@ export default function GachaGame() {
 
   useEffect(() => setMounted(true), []);
 
-  const { freeSpinsLeft, needsAd, recordSpin, grantRewardSpin, todayHistory } = useSpinState("gacha");
-  const { isAdLoaded, isLoading: adLoading, showAd } = useRewardedAd(grantRewardSpin);
+  const { storageError, freeSpinsLeft, needsAd, recordSpin, grantRewardSpin, todayHistory } = useSpinState("gacha");
+  const { isAdLoaded, isLoading: adLoading, loadError, retryAd, showAd } = useRewardedAd(grantRewardSpin);
 
   const pull = useCallback(() => {
     if (phase === "flipping") return;
@@ -39,6 +39,7 @@ export default function GachaGame() {
 
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--toss-grey-100)" }}>
+      {storageError && <p role="alert">기기에 기록을 저장하지 못했어요. 앱을 닫으면 이번 추천 기록이 사라질 수 있어요.</p>}
       <div
         style={{
           flex: 1,
@@ -191,12 +192,12 @@ export default function GachaGame() {
                 size="xlarge"
                 color="dark"
                 variant="fill"
-                disabled={!isAdLoaded}
+                disabled={!isAdLoaded && !loadError}
                 loading={adLoading}
-                onClick={showAd}
+                onClick={loadError ? retryAd : showAd}
                 style={{ borderRadius: 18 }}
               >
-                {isAdLoaded ? "광고 보고 1회 더 뽑기" : "광고 준비 중..."}
+                {isAdLoaded ? "광고 보고 1회 더 뽑기" : loadError ? "광고를 불러오지 못했어요 · 다시 시도" : "광고 준비 중..."}
               </Button>
             </div>
           )}

@@ -17,8 +17,8 @@ export default function RouletteGame() {
 
   useEffect(() => setMounted(true), []);
 
-  const { freeSpinsLeft, needsAd, recordSpin, grantRewardSpin, todayHistory } = useSpinState("roulette");
-  const { isAdLoaded, isLoading: adLoading, showAd } = useRewardedAd(grantRewardSpin);
+  const { storageError, freeSpinsLeft, needsAd, recordSpin, grantRewardSpin, todayHistory } = useSpinState("roulette");
+  const { isAdLoaded, isLoading: adLoading, loadError, retryAd, showAd } = useRewardedAd(grantRewardSpin);
 
   const spin = useCallback(() => {
     if (isSpinning) return;
@@ -39,6 +39,7 @@ export default function RouletteGame() {
 
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--toss-grey-100)" }}>
+      {storageError && <p role="alert">기기에 기록을 저장하지 못했어요. 앱을 닫으면 이번 추천 기록이 사라질 수 있어요.</p>}
       <CategoryFilter selected={category} onChange={setCategory} />
 
       <div
@@ -110,12 +111,12 @@ export default function RouletteGame() {
                 size="xlarge"
                 color="dark"
                 variant="fill"
-                disabled={!isAdLoaded}
+                disabled={!isAdLoaded && !loadError}
                 loading={adLoading}
-                onClick={showAd}
+                onClick={loadError ? retryAd : showAd}
                 style={{ borderRadius: 18 }}
               >
-                {isAdLoaded ? "광고 보고 1회 더 추천받기" : "광고 준비 중..."}
+                {isAdLoaded ? "광고 보고 1회 더 추천받기" : loadError ? "광고를 불러오지 못했어요 · 다시 시도" : "광고 준비 중..."}
               </Button>
             </div>
           )}

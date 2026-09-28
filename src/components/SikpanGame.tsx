@@ -18,8 +18,8 @@ export default function SikpanGame() {
     setMounted(true);
   }, []);
 
-  const { freeSpinsLeft, needsAd, recordSpin, grantRewardSpin } = useSpinState("sikpan");
-  const { isAdLoaded, isLoading: adLoading, showAd } = useRewardedAd(grantRewardSpin);
+  const { storageError, freeSpinsLeft, needsAd, recordSpin, grantRewardSpin } = useSpinState("sikpan");
+  const { isAdLoaded, isLoading: adLoading, loadError, retryAd, showAd } = useRewardedAd(grantRewardSpin);
 
   const draw = useCallback(() => {
     if (phase === "drawing") return;
@@ -42,6 +42,7 @@ export default function SikpanGame() {
 
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--toss-grey-100)" }}>
+      {storageError && <p role="alert">기기에 기록을 저장하지 못했어요. 앱을 닫으면 이번 추천 기록이 사라질 수 있어요.</p>}
       <div
         style={{
           flex: 1,
@@ -128,12 +129,12 @@ export default function SikpanGame() {
                 size="xlarge"
                 color="dark"
                 variant="fill"
-                disabled={!isAdLoaded}
+                disabled={!isAdLoaded && !loadError}
                 loading={adLoading}
-                onClick={showAd}
+                onClick={loadError ? retryAd : showAd}
                 style={{ borderRadius: 18 }}
               >
-                {isAdLoaded ? "광고 보고 1회 더 뽑기" : "광고 준비 중..."}
+                {isAdLoaded ? "광고 보고 1회 더 뽑기" : loadError ? "광고를 불러오지 못했어요 · 다시 시도" : "광고 준비 중..."}
               </Button>
             </div>
           )}

@@ -42,7 +42,9 @@ function formatDate(ts: number) {
 
 export default function MyPage() {
   // Any game returns the shared full history
-  const { history } = useSpinState("roulette");
+  const { history, storageError } = useSpinState("roulette");
+
+  if (storageError) return <p role="alert">기기에 기록을 저장할 수 없어요. 저장 공간을 확인하고 다시 열어 주세요.</p>;
 
   if (history.length === 0) {
     return (

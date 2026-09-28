@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { loadFullScreenAd, showFullScreenAd } from "@apps-in-toss/web-framework";
 
 const AD_GROUP_ID = "ait.v2.live.34643c7d394f4d05";
@@ -8,28 +8,37 @@ export function useRewardedAd(onReward: () => void) {
   const [isAdLoaded, setIsAdLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [loadError, setLoadError] = useState(false);
+  const unregisterRef = useRef<(() => void) | undefined>(undefined);
   const loadAd = useCallback(() => {
-    if (!loadFullScreenAd.isSupported()) return;
-    setIsLoading(true);
+    unregisterRef.current?.();
+    unregisterRef.current = undefined;
+    setLoadError(false);
     setIsAdLoaded(false);
-    const unregister = loadFullScreenAd({
-      options: { adGroupId: AD_GROUP_ID },
-      onEvent: (event) => {
-        if (event.type === "loaded") {
-          setIsAdLoaded(true);
+    try {
+      if (!loadFullScreenAd.isSupported()) { setLoadError(true); setIsLoading(false); return; }
+      setIsLoading(true);
+      setIsAdLoaded(false);
+      const unregister = loadFullScreenAd({
+        options: { adGroupId: AD_GROUP_ID },
+        onEvent: (event) => {
+          if (event.type === "loaded") {
+            setIsAdLoaded(true);
+            setIsLoading(false);
+          }
+        },
+        onError: () => {
           setIsLoading(false);
-        }
-      },
-      onError: () => {
-        setIsLoading(false);
-      },
-    });
-    return unregister;
+          setLoadError(true);
+        },
+      });
+      unregisterRef.current = unregister;
+    } catch { setIsLoading(false); setIsAdLoaded(false); setLoadError(true); }
   }, []);
 
   useEffect(() => {
-    const unregister = loadAd();
-    return () => { unregister?.(); };
+    loadAd();
+    return () => { unregisterRef.current?.(); };
   }, [loadAd]);
 
   const showAd = useCallback(() => {
@@ -53,5 +62,5 @@ export function useRewardedAd(onReward: () => void) {
     });
   }, [isAdLoaded, onReward, loadAd]);
 
-  return { isAdLoaded, isLoading, showAd };
+  return { isAdLoaded, isLoading, loadError, retryAd: loadAd, showAd };
 }
