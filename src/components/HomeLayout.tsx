@@ -6,6 +6,7 @@ import GachaGame from "@/components/GachaGame";
 import SikpanGame from "@/components/SikpanGame";
 import MyPage from "@/components/MyPage";
 import BottomTabBar, { BottomTab } from "@/components/BottomTabBar";
+import { installHistoryBack } from '@/lib/historyBack';
 
 type GameTab = "roulette" | "gacha" | "sikpan";
 
@@ -30,23 +31,12 @@ export default function HomeLayout({
     return false;
   };
 
-  useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-    let cancelled = false;
-    (async () => {
-      try {
-        const { graniteEvent, closeView } = await import("@apps-in-toss/web-framework");
-        if (cancelled) return;
-        unsubscribe = graniteEvent.addEventListener("backEvent", {
-          onEvent: () => {
-            if (backRef.current()) return;
-            closeView();
-          },
-        });
-      } catch { /* 토스 앱 밖 */ }
-    })();
-    return () => { cancelled = true; unsubscribe?.(); };
-  }, []);
+  const historyBackRef = useRef<() => boolean>(() => false);
+  historyBackRef.current = () => {
+            if (backRef.current()) return true;
+            return false;
+          };
+  useEffect(() => installHistoryBack(() => historyBackRef.current()), []);
 
   return (
     <div
