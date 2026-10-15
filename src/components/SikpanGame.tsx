@@ -38,160 +38,62 @@ export default function SikpanGame() {
 
   const canDraw = freeSpinsLeft > 0 && phase !== "drawing";
 
-  if (!mounted) return null;
-
   return (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", background: "var(--toss-grey-100)" }}>
-      {storageError && <p role="alert">기기에 기록을 저장하지 못했어요. 앱을 닫으면 이번 추천 기록이 사라질 수 있어요.</p>}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "24px 20px",
-          gap: 32,
-          overflowY: "auto",
-        }}
-      >
-        {/* 식판 트레이 */}
-        <div
-          className="toss-card"
-          style={{
-            width: "100%",
-            background: "var(--toss-card)",
-            display: "flex",
-            flexDirection: "column",
-            gap: 16,
-            aspectRatio: "1.4 / 1",
-            maxWidth: 400,
-            position: "relative",
-            margin: "0 auto",
-            padding: 24,
-            border: "1px solid var(--toss-grey-100)",
-          }}
-        >
-          <div style={{ display: "flex", gap: 12, flex: 1.2 }}>
-            <SlotSikpan
-              label="메인"
-              value={phase === "done" ? result?.main ?? null : null}
-              isSpinning={phase === "drawing"}
-            />
-            <SlotSikpan
-              label="국/찌개"
-              value={phase === "done" ? result?.soup ?? null : null}
-              isSpinning={phase === "drawing"}
-            />
+    <div className="game-shell">
+      <div className="game-scroll">
+        {storageError && <p className="storage-alert" role="alert">기기에 기록을 저장하지 못했어요. 앱을 닫으면 이번 추천 기록이 사라질 수 있어요.</p>}
+        <div className="game-scene">
+          <div className="tray-heading">
+            <h1>오늘의 식판을 채워볼까요?</h1>
+            <p>밥부터 반찬까지 한 번에 골라드려요</p>
           </div>
-          <div style={{ display: "flex", gap: 12, flex: 1 }}>
-            <SlotSikpan
-              label="반찬 1"
-              value={phase === "done" ? result?.side1 ?? null : null}
-              isSpinning={phase === "drawing"}
-            />
-            <SlotSikpan
-              label="반찬 2"
-              value={phase === "done" ? result?.side2 ?? null : null}
-              isSpinning={phase === "drawing"}
-            />
+          <div className="toss-card sikpan-tray" data-result={phase === "done"}>
+            <SlotSikpan label="밥" icon="🍚" value={phase === "done" ? result?.main ?? null : null} isSpinning={phase === "drawing"} />
+            <SlotSikpan label="국/찌개" icon="🥣" value={phase === "done" ? result?.soup ?? null : null} isSpinning={phase === "drawing"} />
+            <SlotSikpan label="반찬 1" icon="🍳" value={phase === "done" ? result?.side1 ?? null : null} isSpinning={phase === "drawing"} />
+            <SlotSikpan label="반찬 2" icon="🥬" value={phase === "done" ? result?.side2 ?? null : null} isSpinning={phase === "drawing"} />
           </div>
-        </div>
-
-        {/* 버튼 */}
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 12 }}>
-          {freeSpinsLeft > 0 && (
-            <p style={{ fontSize: 14, color: "var(--toss-grey-500)", margin: 0, textAlign: "center", fontWeight: 600 }}>
-              무료 뽑기 <strong style={{ color: "var(--toss-primary)" }}>{freeSpinsLeft}회</strong> 남음
-            </p>
-          )}
-
-          {canDraw && (
-            <Button
-              display="full"
-              size="xlarge"
-              color="primary"
-              variant="fill"
-              onClick={draw}
-              style={{ borderRadius: 18 }}
-            >
-              {phase === "done" ? "다시 뽑기" : "오늘의 식판"}
-            </Button>
-          )}
-
-          {needsAd && phase !== "drawing" && (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-              <p style={{ fontSize: 14, color: "var(--toss-grey-500)", margin: 0, fontWeight: 500 }}>
-                오늘 무료 뽑기를 모두 사용했어요
-              </p>
-              <Button
-                display="full"
-                size="xlarge"
-                color="dark"
-                variant="fill"
-                disabled={!isAdLoaded && !loadError}
-                loading={adLoading}
-                onClick={loadError ? retryAd : showAd}
-                style={{ borderRadius: 18 }}
-              >
-                {isAdLoaded ? "광고 보고 1회 더 뽑기" : loadError ? "광고를 불러오지 못했어요 · 다시 시도" : "광고 준비 중..."}
-              </Button>
-            </div>
-          )}
+          <p className="game-status" role="status" aria-live="polite" aria-atomic="true">
+            {phase === "drawing" ? "식판을 채우는 중..." : result ? `${result.main} · ${result.soup} · ${result.side1} · ${result.side2}, 식판이 완성됐어요` : "버튼을 누르면 네 가지 메뉴를 골라드려요"}
+          </p>
         </div>
       </div>
 
+      <div className="game-actions">
+        <div className="free-count">
+          {mounted && freeSpinsLeft > 0 && (
+            <p>무료 뽑기 <strong>{freeSpinsLeft}회</strong> 남음</p>
+          )}
+        </div>
+        {(!needsAd || phase === "drawing") && (
+          <Button display="full" size="xlarge" color="primary" variant="fill" disabled={!canDraw} onClick={draw} style={{ borderRadius: 18, backgroundColor: "var(--toss-primary-hover)" }}>
+            {phase === "drawing" ? "식판 채우는 중" : phase === "done" ? "다시 뽑기" : "식판 채우기"}
+          </Button>
+        )}
+        {needsAd && phase !== "drawing" && (
+          <div className="ad-actions">
+            <p>오늘 무료 뽑기를 모두 사용했어요</p>
+            <Button display="full" size="xlarge" color="dark" variant="fill" disabled={!isAdLoaded && !loadError} loading={adLoading} onClick={loadError ? retryAd : showAd} style={{ borderRadius: 18 }}>
+              {isAdLoaded ? "광고 보고 1회 더 뽑기" : loadError ? "광고를 불러오지 못했어요 · 다시 시도" : "광고 준비 중..."}
+            </Button>
+          </div>
+        )}
+      </div>
       <BannerAd />
     </div>
   );
 }
 
-function SlotSikpan({ label, value, isSpinning }: { label: string; value: string | null; isSpinning: boolean }) {
+function SlotSikpan({ label, icon, value, isSpinning }: { label: string; icon: string; value: string | null; isSpinning: boolean }) {
   return (
-    <div
-      style={{
-        flex: 1,
-        background: "var(--toss-grey-50)",
-        borderRadius: 20,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "12px 8px",
-        position: "relative",
-        overflow: "hidden",
-        minHeight: 80,
-        animation: value ? "result-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)" : undefined,
-        border: "1px solid var(--toss-grey-100)",
-      }}
-    >
-      <span style={{ fontSize: 12, color: "var(--toss-grey-500)", marginBottom: 8, fontWeight: 700 }}>{label}</span>
+    <div className="sikpan-slot">
+      <span className="sikpan-slot-label">{label}</span>
       {isSpinning ? (
-        <div
-          style={{
-            width: 24,
-            height: 24,
-            borderRadius: "50%",
-            border: "3px solid var(--toss-grey-200)",
-            borderTopColor: "var(--toss-primary)",
-            animation: "spin 0.8s linear infinite",
-          }}
-        />
+        <span className="menu-spinner" aria-hidden="true" />
       ) : value ? (
-        <span
-          style={{
-            fontSize: 16,
-            fontWeight: 800,
-            color: "var(--toss-grey-900)",
-            textAlign: "center",
-            lineHeight: 1.3,
-            letterSpacing: "-0.3px",
-          }}
-        >
-          {value}
-        </span>
+        <span className="sikpan-slot-value">{value}</span>
       ) : (
-        <span style={{ fontSize: 24, color: "var(--toss-grey-200)", fontWeight: 800 }}>?</span>
+        <span className="sikpan-slot-placeholder" aria-hidden="true">{icon}</span>
       )}
     </div>
   );

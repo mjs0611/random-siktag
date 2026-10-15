@@ -1,8 +1,11 @@
+import Link from "next/link";
+
 export default function TermsPage() {
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px 80px", fontFamily: "sans-serif", color: "#191f28", lineHeight: 1.7 }}>
+      <Link href="/" style={{ display: "inline-flex", alignItems: "center", minHeight: 44, marginBottom: 20, padding: "0 12px", borderRadius: 12, color: "#1B64DA", fontSize: 16, textDecoration: "underline", textUnderlineOffset: 4 }}>홈으로 돌아가기</Link>
       <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>서비스 이용약관</h1>
-      <p style={{ fontSize: 13, color: "#6b7684", marginBottom: 40 }}>시행일: 2026년 3월 27일</p>
+      <p style={{ fontSize: 14, color: "#4e5968", marginBottom: 40 }}>시행일: 2026년 3월 27일</p>
 
       <section style={{ marginBottom: 36 }}>
         <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 12 }}>제1조 (목적)</h2>
@@ -39,7 +42,7 @@ export default function TermsPage() {
         </p>
       </section>
 
-      <p style={{ fontSize: 13, color: "#6b7684", marginTop: 48 }}>
+      <p style={{ fontSize: 14, color: "#4e5968", marginTop: 48 }}>
         문의: help.ditoaxis@gmail.com<br />
         사업자: 디토엑시스(Dito Axis)
       </p>

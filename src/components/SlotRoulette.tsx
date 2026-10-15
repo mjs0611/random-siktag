@@ -46,90 +46,35 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSpinning, result]);
 
-  const displayItems = sequence.length > 0 ? sequence : result ? [result] : ["?"];
+  const displayItems = sequence.length > 0 ? sequence : result ? [result] : [];
 
   return (
-    <div
-      style={{
-        width: "100%",
-        maxWidth: 340,
-        background: "var(--toss-card)",
-        borderRadius: "var(--toss-border-radius-lg)",
-        overflow: "hidden",
-        position: "relative",
-        boxShadow: "var(--toss-shadow-md)",
-        border: "1px solid var(--toss-grey-100)",
-      }}
-    >
-      {/* 선택 하이라이트 */}
-      <div
-        style={{
-          position: "absolute",
-          top: ITEM_HEIGHT,
-          left: 0,
-          right: 0,
-          height: ITEM_HEIGHT,
-          background: "var(--toss-primary-light)",
-          borderTop: "1.5px solid var(--toss-primary)",
-          borderBottom: "1.5px solid var(--toss-primary)",
-          zIndex: 0,
-        }}
-      />
-
-      <div style={{ height: ITEM_HEIGHT * 3, overflow: "hidden", position: "relative", zIndex: 1 }}>
-        <div
-          style={{
-            transform: `translateY(${ITEM_HEIGHT + offset}px)`,
-            transition: animating
-              ? `transform ${SPIN_DURATION}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`
-              : "none",
-          }}
-        >
-          {displayItems.map((item, i) => (
+    <div className="slot-roulette" data-spinning={isSpinning} data-result={!!result && !isSpinning}>
+      {!result ? (
+        <div className="recommendation-empty">
+          <img src="/icons/roulette.png" alt="" width={64} height={64} />
+          <h1>오늘 뭐 먹을까요?</h1>
+          <p>분류를 고르거나 바로 추천받아 보세요</p>
+        </div>
+      ) : (
+        <>
+          <div className="slot-highlight" aria-hidden="true" />
+          <div className="slot-window" aria-hidden="true">
             <div
-              key={i}
+              className="slot-track"
               style={{
-                height: ITEM_HEIGHT,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 24,
-                fontWeight: 800,
-                color: "var(--toss-grey-900)",
-                letterSpacing: "-0.5px",
+                transform: `translateY(${ITEM_HEIGHT + offset}px)`,
+                transition: animating ? `transform ${SPIN_DURATION}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)` : "none",
               }}
             >
-              {item}
+              {displayItems.map((item, i) => <div className="slot-item" key={i}>{item}</div>)}
             </div>
-          ))}
-        </div>
-
-        {/* 페이드 */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: ITEM_HEIGHT,
-            background: "linear-gradient(to bottom, var(--toss-card), rgba(255,255,255,0))",
-            pointerEvents: "none",
-            zIndex: 1,
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: ITEM_HEIGHT,
-            background: "linear-gradient(to top, var(--toss-card), rgba(255,255,255,0))",
-            pointerEvents: "none",
-            zIndex: 1,
-          }}
-        />
-      </div>
+            <div className="slot-fade slot-fade-top" />
+            <div className="slot-fade slot-fade-bottom" />
+          </div>
+          <p className="reduced-motion-status" aria-hidden="true">추천 메뉴를 고르는 중...</p>
+        </>
+      )}
     </div>
   );
 }

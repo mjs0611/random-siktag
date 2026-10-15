@@ -40,6 +40,7 @@ export default function HomeLayout({
 
   return (
     <div
+      className="app-shell"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -54,6 +55,8 @@ export default function HomeLayout({
         <>
           {/* 게임 탭 선택 */}
           <div
+            role="group"
+            aria-label="메뉴 추천 방식"
             style={{
               padding: "20px 16px 14px",
               background: "var(--toss-card)",
@@ -74,26 +77,27 @@ export default function HomeLayout({
           </div>
 
           {/* 게임 콘텐츠 */}
-          <div
+          <main
             style={{
               flex: 1,
+              minHeight: 0,
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
-              paddingBottom: "calc(96px + env(safe-area-inset-bottom))",
+              paddingBottom: "calc(112px + env(safe-area-inset-bottom))",
             }}
           >
             {gameTab === "roulette" && <RouletteGame />}
             {gameTab === "gacha" && <GachaGame />}
             {gameTab === "sikpan" && <SikpanGame />}
-          </div>
+          </main>
         </>
       )}
 
       {bottomTab === "history" && (
-        <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", paddingBottom: "calc(96px + env(safe-area-inset-bottom))" }}>
-          <MyPage />
-        </div>
+        <main style={{ flex: 1, minHeight: 0, overflow: "hidden", display: "flex", flexDirection: "column", paddingBottom: "calc(112px + env(safe-area-inset-bottom))" }}>
+          <MyPage onRecommend={() => setBottomTab("home")} />
+        </main>
       )}
 
       <BottomTabBar active={bottomTab} onChange={setBottomTab} />

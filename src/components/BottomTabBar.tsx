@@ -8,18 +8,18 @@ interface Props {
 }
 
 function HomeIcon({ active }: { active: boolean }) {
-  const color = active ? "#3182F6" : "#ADB5BD";
+  const color = active ? "#1B64DA" : "#4E5968";
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M3 12L12 3L21 12V21H15V15H9V21H3V12Z" fill={color} />
     </svg>
   );
 }
 
 function HistoryIcon({ active }: { active: boolean }) {
-  const color = active ? "#3182F6" : "#ADB5BD";
+  const color = active ? "#1B64DA" : "#4E5968";
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle cx="12" cy="12" r="9" stroke={color} strokeWidth="2" />
       <path d="M12 7V12L15 15" stroke={color} strokeWidth="2" strokeLinecap="round" />
       <path d="M7 12H3" stroke={color} strokeWidth="2" strokeLinecap="round" />
@@ -31,6 +31,8 @@ function HistoryIcon({ active }: { active: boolean }) {
 export default function BottomTabBar({ active, onChange }: Props) {
   return (
     <nav
+      className="bottom-tab-bar"
+      aria-label="주요 화면"
       style={{
         position: "fixed",
         bottom: "calc(24px + env(safe-area-inset-bottom))",
@@ -54,6 +56,9 @@ export default function BottomTabBar({ active, onChange }: Props) {
         return (
           <button
             key={id}
+            type="button"
+            className="bottom-tab-button"
+            aria-current={isActive ? "page" : undefined}
             onClick={() => onChange(id)}
             style={{
               flex: 1,
@@ -69,19 +74,14 @@ export default function BottomTabBar({ active, onChange }: Props) {
               fontFamily: "inherit",
             }}
           >
-            <div
-              style={{
-                transform: isActive ? "scale(1.1)" : "scale(1)",
-                transition: "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-              }}
-            >
+            <div className="bottom-tab-icon" data-active={isActive}>
               {id === "home" ? <HomeIcon active={isActive} /> : <HistoryIcon active={isActive} />}
             </div>
             <span
               style={{
-                fontSize: 11,
+                fontSize: 14,
                 fontWeight: isActive ? 700 : 500,
-                color: isActive ? "#3182F6" : "#ADB5BD",
+                color: isActive ? "#1B64DA" : "#4E5968",
               }}
             >
               {label}
