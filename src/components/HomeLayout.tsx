@@ -31,12 +31,7 @@ export default function HomeLayout({
     return false;
   };
 
-  const historyBackRef = useRef<() => boolean>(() => false);
-  historyBackRef.current = () => {
-            if (backRef.current()) return true;
-            return false;
-          };
-  useEffect(() => installHistoryBack(() => historyBackRef.current()), []);
+  useEffect(() => installHistoryBack(() => backRef.current()), []);
 
   return (
     <div
