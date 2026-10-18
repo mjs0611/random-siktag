@@ -271,6 +271,12 @@ summary:focus-visible {
   text-align: center;
 }
 
+/* bowl spans ~68% of a 256px frame; frames have ~20% empty space above/below */
+.hero-bowl {
+  width: 128px;
+  margin: -24px 0;
+}
+
 .recommendation-empty h1,
 .tray-heading h1 {
   margin: 0;

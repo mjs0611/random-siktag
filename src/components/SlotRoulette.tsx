@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { getSlotSequence, Category } from "@/lib/menus";
+import { mountTurntable } from "@/lib/turntable";
 
 interface Props {
   result: string | null;
@@ -11,6 +12,12 @@ interface Props {
 
 const ITEM_HEIGHT = 72;
 const SPIN_DURATION = 1800;
+
+function BibimbapBowl() {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => (ref.current ? mountTurntable(ref.current, { sprite: "/hero/siktag-spin.webp", still: "/hero/siktag-spin-still.webp" }) : undefined), []);
+  return <span ref={ref} className="hero-bowl" />;
+}
 
 export default function SlotRoulette({ result, category, isSpinning, onDone }: Props) {
   const [sequence, setSequence] = useState<string[]>([]);
@@ -52,7 +59,7 @@ export default function SlotRoulette({ result, category, isSpinning, onDone }: P
     <div className="slot-roulette" data-spinning={isSpinning} data-result={!!result && !isSpinning}>
       {!result ? (
         <div className="recommendation-empty">
-          <img src="/icons/roulette.png" alt="" width={64} height={64} />
+          <BibimbapBowl />
           <h1>오늘 뭐 먹을까요?</h1>
           <p>분류를 고르거나 바로 추천받아 보세요</p>
         </div>
