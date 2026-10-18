@@ -306,6 +306,7 @@ test('history returns to the selected game, then roulette, then native close', a
     '@/components/MyPage': { default: 'MyPage' },
     '@/components/BottomTabBar': { default: 'BottomTabBar' },
     '@/lib/historyBack': { installHistoryBack: back.installHistoryBack },
+    '@/lib/cardTilt': { installCardTilt: () => () => {} },
   });
   let tree = home.render({ initialGameTab: 'gacha' });
   await flushImports();

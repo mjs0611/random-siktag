@@ -7,6 +7,7 @@ import SikpanGame from "@/components/SikpanGame";
 import MyPage from "@/components/MyPage";
 import BottomTabBar, { BottomTab } from "@/components/BottomTabBar";
 import { installHistoryBack } from '@/lib/historyBack';
+import { installCardTilt } from '@/lib/cardTilt';
 
 type GameTab = "roulette" | "gacha" | "sikpan";
 
@@ -32,6 +33,8 @@ export default function HomeLayout({
   };
 
   useEffect(() => installHistoryBack(() => backRef.current()), []);
+  // 추천 결과 카드를 누르면 손가락 쪽으로 기운다.
+  useEffect(() => installCardTilt('.slot-roulette, .gacha-card, .sikpan-tray'), []);
 
   return (
     <div
