@@ -5,6 +5,7 @@ import CategoryFilter from "@/components/CategoryFilter";
 import SlotRoulette from "@/components/SlotRoulette";
 import BannerAd from "@/components/BannerAd";
 import { useSpinState } from "@/hooks/useSpinState";
+import { copula } from "@/lib/copula";
 import { useRewardedAd } from "@/hooks/useRewardedAd";
 import { pickRandom, Category } from "@/lib/menus";
 import { haptic } from "@/lib/bridge";
@@ -45,7 +46,7 @@ export default function RouletteGame() {
         <div className="game-scene">
           <SlotRoulette result={result} category={category} isSpinning={isSpinning} onDone={handleSpinDone} />
           <p className="game-status" role="status" aria-live="polite" aria-atomic="true">
-            {isSpinning ? "추천 메뉴를 고르는 중..." : result ? <>오늘의 추천 메뉴는 <strong>{result}</strong>예요</> : "버튼을 누르면 메뉴를 골라드려요"}
+            {isSpinning ? "추천 메뉴를 고르는 중..." : result ? <>오늘의 추천 메뉴는 <strong>{result}</strong>{copula(result)}</> : "버튼을 누르면 메뉴를 골라드려요"}
           </p>
         </div>
       </div>
