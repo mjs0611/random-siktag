@@ -66,7 +66,7 @@ export default function MyPage({ onRecommend }: Props) {
             <p role="alert" style={{ fontSize: 16, lineHeight: 1.6, color: "#4E5968", margin: "0 0 16px" }}>
               기기에 기록을 저장할 수 없어요. 저장 공간을 확인하고 다시 열어 주세요.
             </p>
-            <Button display="full" size="large" color="primary" variant="fill" onClick={onRecommend} style={{ minHeight: 48, background: "#1B64DA" }}>
+            <Button display="full" size="large" color="primary" variant="fill" onClick={onRecommend} style={{ minHeight: 48 }}>
               메뉴 추천받기
             </Button>
           </div>
@@ -77,7 +77,7 @@ export default function MyPage({ onRecommend }: Props) {
             <h2 style={{ fontSize: 20, fontWeight: 700, color: "#191F28", margin: 0 }}>아직 기록이 없어요</h2>
             <p style={{ fontSize: 16, lineHeight: 1.6, color: "#4E5968", margin: 0 }}>메뉴를 추천받으면 여기에 쌓여요</p>
             {!storageError && (
-              <Button display="full" size="large" color="primary" variant="fill" onClick={onRecommend} style={{ minHeight: 48, marginTop: 12, background: "#1B64DA" }}>
+              <Button display="full" size="large" color="primary" variant="fill" onClick={onRecommend} style={{ minHeight: 48, marginTop: 12 }}>
                 메뉴 추천받기
               </Button>
             )}
@@ -94,7 +94,7 @@ export default function MyPage({ onRecommend }: Props) {
               }}
             >
               <p style={{ fontSize: 16, color: "#4E5968", marginBottom: 12, marginTop: 0 }}>
-                총 <strong style={{ color: "#1B64DA" }}>{history.length}회</strong> 뽑았어요
+                총 <strong style={{ color: "var(--primary)" }}>{history.length}회</strong> 뽑았어요
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {gameCounts
@@ -116,7 +116,7 @@ export default function MyPage({ onRecommend }: Props) {
                     >
                       <img src={g.iconPath} alt="" style={{ width: 20, height: 20, objectFit: "contain" }} />
                       <span>{g.label}</span>
-                      <span style={{ color: "#1B64DA", marginLeft: 2 }}>{g.count}</span>
+                      <span style={{ color: "var(--primary)", marginLeft: 2 }}>{g.count}</span>
                     </div>
                   ))}
               </div>
