@@ -115,8 +115,25 @@ summary:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  padding: 24px 20px;
+  padding: 16px 20px;
   min-height: 280px;
+}
+
+/* 추천 방식 전환 — 보조 조작이라 CTA 아래, 작은 세그먼트 */
+.game-mode-row {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 16px;
+  background: var(--toss-surface);
+}
+.game-mode-row > span {
+  color: var(--toss-grey-700);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .game-status {

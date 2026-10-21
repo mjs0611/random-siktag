@@ -5,7 +5,6 @@ import { drawSikpan, SikpanResult } from "@/lib/menus";
 import { haptic } from "@/lib/bridge";
 import { useSpinState } from "@/hooks/useSpinState";
 import { useRewardedAd } from "@/hooks/useRewardedAd";
-import BannerAd from "@/components/BannerAd";
 
 type Phase = "idle" | "drawing" | "done";
 
@@ -74,12 +73,11 @@ export default function SikpanGame() {
           <div className="ad-actions">
             <p>오늘 무료 뽑기를 모두 사용했어요</p>
             <Button display="full" size="xlarge" color="dark" variant="fill" disabled={!isAdLoaded && !loadError} loading={adLoading} onClick={loadError ? retryAd : showAd} style={{ borderRadius: 18 }}>
-              {isAdLoaded ? "광고 보고 1회 더 뽑기" : loadError ? "광고를 불러오지 못했어요 · 다시 시도" : "광고 준비 중..."}
+              {isAdLoaded ? "광고 보고 1회 더 뽑기" : loadError ? "광고 다시 불러오기" : "광고 준비 중..."}
             </Button>
           </div>
         )}
       </div>
-      <BannerAd />
     </div>
   );
 }

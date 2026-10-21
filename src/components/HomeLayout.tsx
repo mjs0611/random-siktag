@@ -5,9 +5,9 @@ import RouletteGame from "@/components/RouletteGame";
 import GachaGame from "@/components/GachaGame";
 import SikpanGame from "@/components/SikpanGame";
 import MyPage from "@/components/MyPage";
+import BannerAd from "@/components/BannerAd";
 import BottomTabBar, { BottomTab } from "@/components/BottomTabBar";
 import { installHistoryBack } from '@/lib/historyBack';
-import { installCardTilt } from '@/lib/cardTilt';
 
 type GameTab = "roulette" | "gacha" | "sikpan";
 
@@ -33,8 +33,6 @@ export default function HomeLayout({
   };
 
   useEffect(() => installHistoryBack(() => backRef.current()), []);
-  // 추천 결과 카드를 누르면 손가락 쪽으로 기운다.
-  useEffect(() => installCardTilt('.slot-roulette, .gacha-card, .sikpan-tray'), []);
 
   return (
     <div
@@ -50,46 +48,30 @@ export default function HomeLayout({
       }}
     >
       {bottomTab === "home" && (
-        <>
-          {/* 게임 탭 선택 */}
-          <div
-            role="group"
-            aria-label="메뉴 추천 방식"
-            style={{
-              padding: "20px 16px 14px",
-              background: "var(--toss-card)",
-              flexShrink: 0,
-              zIndex: 10,
-              boxShadow: "0 1px 0 0 var(--toss-grey-100)",
-            }}
-          >
-            <SegmentedControl
-              value={gameTab}
-              onChange={(v) => setGameTab(v as GameTab)}
-              size="large"
-            >
+        <main
+          style={{
+            flex: 1,
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+            paddingBottom: "calc(112px + env(safe-area-inset-bottom))",
+          }}
+        >
+          {/* 기본은 "메뉴 추천받기" 한 버튼. 방식(룰렛·뽑기·식판) 바꾸기는 보조라 아래에 둔다 */}
+          {gameTab === "roulette" && <RouletteGame />}
+          {gameTab === "gacha" && <GachaGame />}
+          {gameTab === "sikpan" && <SikpanGame />}
+          <div role="group" aria-label="추천 방식 바꾸기" className="game-mode-row">
+            <span>추천 방식</span>
+            <SegmentedControl value={gameTab} onChange={(v) => setGameTab(v as GameTab)} size="small">
               <SegmentedControl.Item value="roulette">룰렛</SegmentedControl.Item>
               <SegmentedControl.Item value="gacha">뽑기</SegmentedControl.Item>
               <SegmentedControl.Item value="sikpan">식판</SegmentedControl.Item>
             </SegmentedControl>
           </div>
-
-          {/* 게임 콘텐츠 */}
-          <main
-            style={{
-              flex: 1,
-              minHeight: 0,
-              display: "flex",
-              flexDirection: "column",
-              overflow: "hidden",
-              paddingBottom: "calc(112px + env(safe-area-inset-bottom))",
-            }}
-          >
-            {gameTab === "roulette" && <RouletteGame />}
-            {gameTab === "gacha" && <GachaGame />}
-            {gameTab === "sikpan" && <SikpanGame />}
-          </main>
-        </>
+          <BannerAd />
+        </main>
       )}
 
       {bottomTab === "history" && (

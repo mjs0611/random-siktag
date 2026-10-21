@@ -11,7 +11,7 @@ interface Props {
 }
 
 const ITEM_HEIGHT = 72;
-const SPIN_DURATION = 1800;
+const SPIN_DURATION = 600; // 결과는 이미 상태 문구에 보이므로 연출은 짧게
 
 function BibimbapBowl() {
   const ref = useRef<HTMLSpanElement>(null);
