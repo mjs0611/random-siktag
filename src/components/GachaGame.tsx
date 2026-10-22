@@ -30,7 +30,7 @@ export default function GachaGame() {
       setPhase("done");
       recordSpin({ game: "gacha", label: drawn.menu, rarity: drawn.rarity });
       haptic(drawn.rarity === "legend" ? "confetti" : "success");
-    }, 1200);
+    }, 300); // 결과는 이미 정해져 있어 짧은 뒤집기만 보여준다
   }, [phase, recordSpin]);
 
   const cfg = result ? GACHA_RARITY_CONFIG[result.rarity] : null;

@@ -32,7 +32,7 @@ export default function SikpanGame() {
       const label = `${drawn.main} · ${drawn.soup} · ${drawn.side1} · ${drawn.side2}`;
       recordSpin({ game: "sikpan", label });
       haptic("success");
-    }, 1000);
+    }, 300); // 결과는 이미 정해져 있어 짧은 연출만 보여준다
   }, [phase, recordSpin]);
 
   const canDraw = freeSpinsLeft > 0 && phase !== "drawing";
