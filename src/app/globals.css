@@ -7,9 +7,9 @@
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", sans-serif;
   
   /* Toss Blue Palette */
-  --toss-primary: #3182F6;
-  --toss-primary-hover: #1b64da;
-  --toss-primary-light: #EBF3FF;
+  --primary: #1B64DA; --primary-pressed: #1957C2; --primary-weak: #E8F3FF; --on-primary: #FFFFFF; --toss-primary: var(--primary);
+  --toss-primary-hover: var(--primary); /* legacy alias: used as main fill */
+  --toss-primary-light: var(--primary-weak);
   
   /* Grays */
   --toss-grey-50: #F9FAFB;

@@ -8,7 +8,7 @@ interface Props {
 }
 
 function HomeIcon({ active }: { active: boolean }) {
-  const color = active ? "#1B64DA" : "#4E5968";
+  const color = active ? "var(--primary)" : "#4E5968";
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M3 12L12 3L21 12V21H15V15H9V21H3V12Z" fill={color} />
@@ -17,7 +17,7 @@ function HomeIcon({ active }: { active: boolean }) {
 }
 
 function HistoryIcon({ active }: { active: boolean }) {
-  const color = active ? "#1B64DA" : "#4E5968";
+  const color = active ? "var(--primary)" : "#4E5968";
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle cx="12" cy="12" r="9" stroke={color} strokeWidth="2" />
@@ -81,7 +81,7 @@ export default function BottomTabBar({ active, onChange }: Props) {
               style={{
                 fontSize: 14,
                 fontWeight: isActive ? 700 : 500,
-                color: isActive ? "#1B64DA" : "#4E5968",
+                color: isActive ? "var(--primary)" : "#4E5968",
               }}
             >
               {label}
